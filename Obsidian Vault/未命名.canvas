@@ -1,0 +1,13 @@
+{
+	"nodes":[
+		{"id":"31fd6b6b302a98fc","x":-480,"y":200,"width":400,"height":400,"type":"file","file":"电路原理相关证明/06_第六章 一阶电路.md"},
+		{"id":"495a1dcd5ee8819f","x":360,"y":-160,"width":400,"height":400,"type":"file","file":"电路原理相关证明/06.1_一阶线性动态系统（电路）响应的底层数学与物理逻辑.md"},
+		{"id":"db60933767587adf","x":-1400,"y":-560,"width":400,"height":400,"type":"file","file":"电路原理相关证明/00电路分析证明.md"},
+		{"id":"6b5d58e2135d00c8","x":461,"y":685,"width":400,"height":400,"type":"file","file":"电路原理相关证明/06.2_动态电路叠加定理.md"}
+	],
+	"edges":[
+		{"id":"2f40e13deb4b6756","fromNode":"db60933767587adf","fromSide":"right","toNode":"31fd6b6b302a98fc","toSide":"left"},
+		{"id":"bff468401ad72351","fromNode":"31fd6b6b302a98fc","fromSide":"right","toNode":"495a1dcd5ee8819f","toSide":"left"},
+		{"id":"eeaab9842437fd1b","fromNode":"31fd6b6b302a98fc","fromSide":"right","toNode":"6b5d58e2135d00c8","toSide":"left"}
+	]
+}
