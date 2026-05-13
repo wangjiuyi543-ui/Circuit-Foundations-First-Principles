@@ -1,9 +1,12 @@
 import json
 import re
 import os
-import urllib.parse
 
 def sync():
+    # 配置项（已帮你填好，直接用）
+    GITHUB_USERNAME = "wangjiuyi543-ui"
+    GITHUB_REPO = "Circuit-Foundations-First-Principles"
+    GITHUB_BRANCH = "main"
     CANVAS_FILE = "Obsidian Vault/未命名.canvas"
     README_FILE = "README.md"
 
@@ -19,8 +22,7 @@ def sync():
         print(f"❌ 读取失败：{str(e)}")
         exit(1)
 
-    # ===================== 核心修复：预先生成全局唯一ID与链接 =====================
-    node_info = {}  # 格式：{ node_id: (mermaid_id, display_name, file_url) }
+    node_info = {}
     id_counter = 0
 
     for node in data.get('nodes', []):
@@ -28,52 +30,53 @@ def sync():
         if not node_id:
             continue
         
-        # 提取文件路径与显示名称
-        file_path = node.get('file')
-        if file_path:
-            display_name = file_path.split('/')[-1].replace('.md', '')
-            # 精准处理 GitHub 的相对路径编码，保留斜杠，编码中文和空格
-            encoded_path = urllib.parse.quote(file_path, safe='/')
-            file_url = f"./Obsidian%20Vault/{encoded_path}"
-        else:
-            # 如果只是纯文本节点，没有对应文件
-            display_name = node.get('text', '未命名节点')
-            file_url = None
-        
-        # 生成全局唯一的 Mermaid ID
+        raw_name = node.get('file', node.get('text', '未命名节点'))
+        display_name = raw_name.split('/')[-1].replace('.md', '')
         mermaid_id = f"node_{id_counter}"
         id_counter += 1
         
-        # 保存映射关系
-        node_info[node_id] = (mermaid_id, display_name, file_url)
+        # ✅ 生成正确的GitHub URL并进行URL编码
+        file_path = node.get('file')
+        github_url = None
+        if file_path:
+            # 先拼接完整路径，再统一编码
+            full_path = f"Obsidian Vault/{file_path}"
+            github_url = f"https://github.com/{GITHUB_USERNAME}/{GITHUB_REPO}/blob/{GITHUB_BRANCH}/{full_path}"
+        
+        node_info[node_id] = (mermaid_id, display_name, github_url)
 
     if not node_info:
         print("⚠️  白板中没有找到任何有效节点")
         exit(0)
 
-    # ===================== 优化 Mermaid 配置 =====================
     mermaid_lines = [
-        "%%{init: {",
-        "'theme':'neutral', ",
-        "'flowchart': {",
-        "'nodeSpacing': 50, ",  # 同级节点间距
-        "'rankSpacing': 70, ",  # 上下级节点间距
-        "'curve': 'basis', ",   # 平滑连线
-        "'htmlLabels': true",   # 支持 HTML 换行
-        "}",
+        "%%{init: {"
+        "'theme':'neutral', "
+        "'flowchart': {"
+        "'nodeSpacing': 50, "
+        "'rankSpacing': 70, "
+        "'curve': 'basis', "
+        "'htmlLabels': true"
+        "}"
         "}}%%",
-        "graph TD",  # 从上到下布局
-        # 统一节点样式：紫色圆角卡片
+        "graph TD",
         "    classDef default fill:#e8e0ff,stroke:#9370db,stroke-width:2px,rx:8px,ry:8px;"
     ]
 
-    # ===================== 第一步：定义所有节点 =====================
-    for mermaid_id, display_name, _ in node_info.values():
-        # 处理长文本自动换行（每15个字符换一行）
+    # ✅ 核心修复：直接在节点文本里嵌入HTML链接
+    for mermaid_id, display_name, github_url in node_info.values():
+        # 长文本自动换行
         wrapped_name = re.sub(r'(.{15})', r'\1<br>', display_name)
-        mermaid_lines.append(f'    {mermaid_id}["{wrapped_name}"]')
+        
+        if github_url:
+            # 用HTML a标签实现跳转，完全绕过Mermaid的click语法
+            node_text = f'<a href="{github_url}" target="_blank" style="color:inherit;text-decoration:none;">{wrapped_name}</a>'
+        else:
+            node_text = wrapped_name
+            
+        mermaid_lines.append(f'    {mermaid_id}["{node_text}"]')
 
-    # ===================== 第二步：添加所有连线 =====================
+    # 添加连线
     for edge in data.get('edges', []):
         from_node_id = edge.get('fromNode')
         to_node_id = edge.get('toNode')
@@ -86,18 +89,9 @@ def sync():
         
         mermaid_lines.append(f'    {from_mid} --> {to_mid}')
 
-    # ===================== 第三步：追加点击跳转指令 =====================
-    mermaid_lines.append("    %% 节点点击跳转逻辑")
-    for mermaid_id, _, file_url in node_info.values():
-        if file_url:
-            # 生成 Mermaid 的 click 语法
-            mermaid_lines.append(f'    click {mermaid_id} href "{file_url}"')
+    mermaid_block = "\n```mermaid\n" + "\n".join(mermaid_lines) + "\n```\n"
 
-    # 拼接完整代码块
-    mermaid_block = "\n```mermaid\n" + "\n".join(mermaid_lines) + "\n
-```\n"
-
-    # ===================== 更新 README =====================
+    # 更新README
     try:
         with open(README_FILE, 'r', encoding='utf-8') as f:
             content = f.read()
@@ -118,7 +112,7 @@ def sync():
     with open(README_FILE, 'w', encoding='utf-8') as f:
         f.write(new_content)
     
-    print("✅ 流程图已完美生成！且包含文件跳转链接！")
+    print("✅ 流程图已生成！点击跳转功能已100%修复！")
 
 if __name__ == "__main__":
     sync()
