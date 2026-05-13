@@ -7,8 +7,8 @@
 		{"id":"20567629ce7f809a","type":"file","file":"电路原理相关证明/06.3.2_线性时不变(LTI)系统中冲激响应与阶跃响应的微积分关系.md","x":600,"y":320,"width":400,"height":400},
 		{"id":"f6bcbb7a1ca65b3a","x":1437,"y":503,"width":400,"height":400,"type":"file","file":"电路原理相关证明/06.3.2.1_补充.md"},
 		{"id":"7ae107231f6577f5","type":"file","file":"电路原理相关证明/06.3.1阶跃函数下电容电压连续性.md","x":885,"y":-271,"width":400,"height":400},
-		{"id":"495a1dcd5ee8819f","type":"file","file":"电路原理相关证明/06.1.0_一阶线性动态系统（电路）响应的底层数学与物理逻辑.md","x":285,"y":-1680,"width":400,"height":400},
-		{"id":"6b5d58e2135d00c8","type":"file","file":"电路原理相关证明/06.2.0_动态电路叠加定理.md","x":400,"y":-991,"width":400,"height":400}
+		{"id":"6b5d58e2135d00c8","type":"file","file":"电路原理相关证明/06.2.0_动态电路叠加定理.md","x":400,"y":-991,"width":400,"height":400},
+		{"id":"495a1dcd5ee8819f","type":"file","file":"电路原理相关证明/06.1.0_一阶线性动态系统（电路）响应的底层数学与物理逻辑.md","x":600,"y":-1840,"width":400,"height":400}
 	],
 	"edges":[
 		{"id":"2f40e13deb4b6756","fromNode":"db60933767587adf","fromSide":"right","toNode":"31fd6b6b302a98fc","toSide":"left"},

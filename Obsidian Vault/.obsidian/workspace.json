@@ -11,17 +11,14 @@
             "id": "ec627ce6f5d47567",
             "type": "leaf",
             "state": {
-              "type": "canvas",
+              "type": "markdown",
               "state": {
-                "file": "未命名.canvas",
-                "viewState": {
-                  "x": -454.38709265473744,
-                  "y": 92.5,
-                  "zoom": -2.34436951105046
-                }
+                "file": "电路原理相关证明/06.3.2.1_补充.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-layout-dashboard",
-              "title": "未命名"
+              "icon": "lucide-file",
+              "title": "06.3.2.1_补充"
             }
           }
         ]
@@ -97,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "未命名.canvas",
+                "file": "电路原理相关证明/06.3.2.1_补充.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -107,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "未命名 的反向链接列表"
+              "title": "06.3.2.1_补充 的反向链接列表"
             }
           },
           {
@@ -188,10 +185,10 @@
   },
   "active": "ec627ce6f5d47567",
   "lastOpenFiles": [
+    "电路原理相关证明/06.3.2_线性时不变(LTI)系统中冲激响应与阶跃响应的微积分关系.md",
     "未命名.canvas",
     "电路原理相关证明/06.3.2.1_补充.md",
     "电路原理相关证明/06.3.3冲激与阶跃响应的微积分关系及工程定义域闭环.md",
-    "电路原理相关证明/06.3.2_线性时不变(LTI)系统中冲激响应与阶跃响应的微积分关系.md",
     "电路原理相关证明/06.1.0_一阶线性动态系统（电路）响应的底层数学与物理逻辑.md",
     "电路原理相关证明/06.3.0_引入阶跃函数与冲击函数的一些问题证明.md",
     "电路原理相关证明/06.3.1阶跃函数下电容电压连续性.md",
