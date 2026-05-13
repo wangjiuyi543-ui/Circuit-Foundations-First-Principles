@@ -1,23 +1,36 @@
 name: Sync Canvas to README
+
+# ✅ 当Obsidian Vault里的白板或脚本变化时自动触发
 on:
   push:
+    branches: [ main ]
     paths:
-      - 'Obsidian Vault/未命名.canvas' # 只有当白板文件更新时才触发
+      - 'Obsidian Vault/未命名.canvas'
+      - 'sync_canvas.py'
+      - '.github/workflows/sync.yml'
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 必须有写入权限才能提交README
+
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-      - name: Run sync script
-        run: python sync_canvas.py
-      - name: Commit changes
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add README.md
-          git commit -m "Auto-sync Canvas logic to README [skip ci]" || exit 0
-          git push
+    - name: 检出代码
+      uses: actions/checkout@v4
+
+    - name: 设置Python环境
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: 运行同步脚本
+      run: python sync_canvas.py
+
+    - name: 提交并推送更新
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add README.md
+        # 只有当有修改时才提交
+        git diff --quiet && git diff --staged --quiet || (git commit -m "🤖 自动同步Canvas到README" && git push)
