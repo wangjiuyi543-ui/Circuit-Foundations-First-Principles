@@ -3,28 +3,19 @@ import re
 import os
 
 def sync():
-    # ✅ 完全匹配你现在的文件路径
+    # ✅ 保持路径完全一致
     CANVAS_FILE = "Obsidian Vault/未命名.canvas"
     README_FILE = "README.md"
 
-    # 1. 检查文件是否存在
     if not os.path.exists(CANVAS_FILE):
         print(f"❌ 错误：未找到 {CANVAS_FILE}")
         exit(1)
     print(f"✅ 找到白板文件：{CANVAS_FILE}")
 
-    # 2. 解析Canvas JSON
-    try:
-        with open(CANVAS_FILE, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-    except json.JSONDecodeError:
-        print("❌ 错误：Canvas文件格式损坏")
-        exit(1)
-    except Exception as e:
-        print(f"❌ 读取失败：{str(e)}")
-        exit(1)
+    with open(CANVAS_FILE, 'r', encoding='utf-8') as f:
+        data = json.load(f)
 
-    # 3. 提取节点
+    # 1. 建立全局节点字典 (键: 原生UUID, 值: 显示名称)
     nodes = {}
     for node in data.get('nodes', []):
         node_id = node.get('id')
@@ -37,56 +28,44 @@ def sync():
     if not nodes:
         print("⚠️  白板中没有找到任何节点")
 
-    # 4. 生成Mermaid（解决ID重复问题）
+    # 2. 生成 Mermaid (核心修正：基于底层节点ID实现物理拓扑连接)
     mermaid_lines = ["graph LR"]
-    used_keys = set()
-
-    def clean_key(name):
-        return re.sub(r'[^\w\u4e00-\u9fa5]', '', name) or "Node"
-
+    
     for edge in data.get('edges', []):
         from_id = edge.get('fromNode')
         to_id = edge.get('toNode')
-        from_name = nodes.get(from_id, "未知节点")
-        to_name = nodes.get(to_id, "未知节点")
 
-        # 自动处理同名节点
-        f_key = clean_key(from_name)
-        t_key = clean_key(to_name)
-        while f_key in used_keys:
-            f_key += "_1"
-        while t_key in used_keys:
-            t_key += "_1"
-        used_keys.add(f_key)
-        used_keys.add(t_key)
+        # 确保节点确实存在于字典中
+        if from_id not in nodes or to_id not in nodes:
+            continue
+
+        from_name = nodes[from_id]
+        to_name = nodes[to_id]
+
+        # 【关键修复】直接将 Obsidian 原生的一长串 UUID 转换为 Mermaid 锚点
+        # 无论它连接多少次，同一个卡片永远映射到同一个锚点上，彻底实现树状闭环
+        f_key = "id_" + re.sub(r'\W', '', from_id)
+        t_key = "id_" + re.sub(r'\W', '', to_id)
 
         mermaid_lines.append(f'    {f_key}["{from_name}"] --> {t_key}["{to_name}"]')
 
-    mermaid_block = "\n```mermaid\n" + "\n".join(mermaid_lines) + "\n```\n"
+    mermaid_block = "\n```mermaid\n" + "\n".join(mermaid_lines) + "\n
+```\n"
 
-    # 5. 更新README
-    try:
-        with open(README_FILE, 'r', encoding='utf-8') as f:
-            content = f.read()
-    except FileNotFoundError:
-        print(f"❌ 错误：未找到 {README_FILE}")
-        exit(1)
+    # 3. 写入 README
+    with open(README_FILE, 'r', encoding='utf-8') as f:
+        content = f.read()
 
     START_MARKER = "<!-- START_CANVAS -->"
     END_MARKER = "<!-- END_CANVAS -->"
 
-    if START_MARKER not in content or END_MARKER not in content:
-        print(f"❌ 错误：README中缺少标记 {START_MARKER} 或 {END_MARKER}")
-        exit(1)
-
-    # 替换标记间内容
     pattern = re.escape(START_MARKER) + r".*?" + re.escape(END_MARKER)
     new_content = re.sub(pattern, START_MARKER + mermaid_block + END_MARKER, content, flags=re.DOTALL)
 
     with open(README_FILE, 'w', encoding='utf-8') as f:
         f.write(new_content)
     
-    print("✅ README流程图已生成！")
+    print("✅ 完美的树状图已生成！")
 
 if __name__ == "__main__":
     sync()
