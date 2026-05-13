@@ -1,6 +1,7 @@
 import json
 import re
 import os
+import urllib.parse
 
 def sync():
     CANVAS_FILE = "Obsidian Vault/未命名.canvas"
@@ -18,8 +19,8 @@ def sync():
         print(f"❌ 读取失败：{str(e)}")
         exit(1)
 
-    # ===================== 节点信息：ID => (MermaidID, 显示名称, 文件路径) =====================
-    node_info = {}
+    # ===================== 核心修复：预先生成全局唯一ID与链接 =====================
+    node_info = {}  # 格式：{ node_id: (mermaid_id, display_name, file_url) }
     id_counter = 0
 
     for node in data.get('nodes', []):
@@ -27,50 +28,52 @@ def sync():
         if not node_id:
             continue
         
-        # 提取显示名称
-        raw_name = node.get('file', node.get('text', '未命名节点'))
-        display_name = raw_name.split('/')[-1].replace('.md', '')
+        # 提取文件路径与显示名称
+        file_path = node.get('file')
+        if file_path:
+            display_name = file_path.split('/')[-1].replace('.md', '')
+            # 精准处理 GitHub 的相对路径编码，保留斜杠，编码中文和空格
+            encoded_path = urllib.parse.quote(file_path, safe='/')
+            file_url = f"./Obsidian%20Vault/{encoded_path}"
+        else:
+            # 如果只是纯文本节点，没有对应文件
+            display_name = node.get('text', '未命名节点')
+            file_url = None
         
-        # 生成全局唯一Mermaid ID
+        # 生成全局唯一的 Mermaid ID
         mermaid_id = f"node_{id_counter}"
         id_counter += 1
         
-        # ✅ 新增：提取并转换文件路径（用于点击跳转）
-        file_path = node.get('file')
-        github_file_path = None
-        if file_path:
-            # 转换为GitHub仓库的相对路径（从根目录出发）
-            github_file_path = f"./Obsidian Vault/{file_path}"
-        
-        # 保存所有信息
-        node_info[node_id] = (mermaid_id, display_name, github_file_path)
+        # 保存映射关系
+        node_info[node_id] = (mermaid_id, display_name, file_url)
 
     if not node_info:
         print("⚠️  白板中没有找到任何有效节点")
         exit(0)
 
-    # ===================== Mermaid 配置 =====================
+    # ===================== 优化 Mermaid 配置 =====================
     mermaid_lines = [
-        "%%{init: {"
-        "'theme':'neutral', "
-        "'flowchart': {"
-        "'nodeSpacing': 50, "
-        "'rankSpacing': 70, "
-        "'curve': 'basis', "
-        "'htmlLabels': true"
-        "}"
+        "%%{init: {",
+        "'theme':'neutral', ",
+        "'flowchart': {",
+        "'nodeSpacing': 50, ",  # 同级节点间距
+        "'rankSpacing': 70, ",  # 上下级节点间距
+        "'curve': 'basis', ",   # 平滑连线
+        "'htmlLabels': true",   # 支持 HTML 换行
+        "}",
         "}}%%",
-        "graph TD",
+        "graph TD",  # 从上到下布局
+        # 统一节点样式：紫色圆角卡片
         "    classDef default fill:#e8e0ff,stroke:#9370db,stroke-width:2px,rx:8px,ry:8px;"
     ]
 
-    # 第一步：定义所有节点
+    # ===================== 第一步：定义所有节点 =====================
     for mermaid_id, display_name, _ in node_info.values():
-        # 长文本自动换行
+        # 处理长文本自动换行（每15个字符换一行）
         wrapped_name = re.sub(r'(.{15})', r'\1<br>', display_name)
         mermaid_lines.append(f'    {mermaid_id}["{wrapped_name}"]')
 
-    # 第二步：添加所有连线
+    # ===================== 第二步：添加所有连线 =====================
     for edge in data.get('edges', []):
         from_node_id = edge.get('fromNode')
         to_node_id = edge.get('toNode')
@@ -83,16 +86,18 @@ def sync():
         
         mermaid_lines.append(f'    {from_mid} --> {to_mid}')
 
-    # ✅ 第三步：给有文件的节点添加点击跳转
-    for mermaid_id, display_name, file_path in node_info.values():
-        if file_path:
-            # Mermaid 点击跳转语法：click 节点ID "URL" "鼠标悬停提示"
-            mermaid_lines.append(f'    click {mermaid_id} "{file_path}" "点击打开对应笔记"')
+    # ===================== 第三步：追加点击跳转指令 =====================
+    mermaid_lines.append("    %% 节点点击跳转逻辑")
+    for mermaid_id, _, file_url in node_info.values():
+        if file_url:
+            # 生成 Mermaid 的 click 语法
+            mermaid_lines.append(f'    click {mermaid_id} href "{file_url}"')
 
     # 拼接完整代码块
-    mermaid_block = "\n```mermaid\n" + "\n".join(mermaid_lines) + "\n```\n"
+    mermaid_block = "\n```mermaid\n" + "\n".join(mermaid_lines) + "\n
+```\n"
 
-    # 更新README
+    # ===================== 更新 README =====================
     try:
         with open(README_FILE, 'r', encoding='utf-8') as f:
             content = f.read()
@@ -113,7 +118,7 @@ def sync():
     with open(README_FILE, 'w', encoding='utf-8') as f:
         f.write(new_content)
     
-    print("✅ 流程图已生成！所有关联笔记的节点都支持点击跳转！")
+    print("✅ 流程图已完美生成！且包含文件跳转链接！")
 
 if __name__ == "__main__":
     sync()
