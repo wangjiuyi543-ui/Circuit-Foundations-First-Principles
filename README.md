@@ -46,7 +46,6 @@ graph TD
     node_6["<a href="https://github.com/wangjiuyi543-ui/Circuit-Foundations-First-Principles/blob/main/Obsidian Vault/电路原理相关证明/06.3.2_线性时不变(LTI)系统中冲激响应与阶跃响应的微积分关系.md" target="_blank" style="color:inherit;text-decoration:none;">06.3.2_线性时不变(LT<br>I)系统中冲激响应与阶跃响应的<br>微积分关系</a>"]
     node_7["<a href="https://github.com/wangjiuyi543-ui/Circuit-Foundations-First-Principles/blob/main/Obsidian Vault/电路原理相关证明/06.3.3冲激与阶跃响应的微积分关系及工程定义域闭环.md" target="_blank" style="color:inherit;text-decoration:none;">06.3.3冲激与阶跃响应的微<br>积分关系及工程定义域闭环</a>"]
     node_8["<a href="https://github.com/wangjiuyi543-ui/Circuit-Foundations-First-Principles/blob/main/Obsidian Vault/电路原理相关证明/06.3.2.1_补充.md" target="_blank" style="color:inherit;text-decoration:none;">06.3.2.1_补充</a>"]
-    node_9["<a href="https://github.com/wangjiuyi543-ui/Circuit-Foundations-First-Principles/blob/main/Obsidian Vault/电路原理相关证明/06.3.4算子与映射.md" target="_blank" style="color:inherit;text-decoration:none;">06.3.4算子与映射</a>"]
     node_0 --> node_1
     node_1 --> node_2
     node_1 --> node_3
@@ -55,6 +54,5 @@ graph TD
     node_4 --> node_6
     node_4 --> node_7
     node_6 --> node_8
-    node_1 --> node_9
 ```
 <!-- END_CANVAS -->
