@@ -1,0 +1,201 @@
+{
+  "main": {
+    "id": "25c4c9178ada8405",
+    "type": "split",
+    "children": [
+      {
+        "id": "4cbfc0ef857693c0",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ec627ce6f5d47567",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "电路原理相关证明/06.1_一阶线性动态系统（电路）响应的底层数学与物理逻辑.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "06.1_一阶线性动态系统（电路）响应的底层数学与物理逻辑"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "c5f8b62bf4938ebd",
+    "type": "split",
+    "children": [
+      {
+        "id": "d937366d0b5a9877",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "0fdf070b9c2660fd",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "28fb2d71b0026c71",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "2b5e833c0fd20c6c",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "e63a8793d2a68c73",
+    "type": "split",
+    "children": [
+      {
+        "id": "c42cbf4da35c5320",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "99604b8d432a6a28",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "电路原理相关证明/06.1_一阶线性动态系统（电路）响应的底层数学与物理逻辑.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "06.1_一阶线性动态系统（电路）响应的底层数学与物理逻辑 的反向链接列表"
+            }
+          },
+          {
+            "id": "39f92516ca753a20",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "一阶线性动态系统（电路）响应的底层数学与物理逻辑.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "一阶线性动态系统（电路）响应的底层数学与物理逻辑 的出链列表"
+            }
+          },
+          {
+            "id": "959707dd533b32df",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "04822cbf768b0e4b",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "添加笔记属性"
+            }
+          },
+          {
+            "id": "9e12da2ee88bf72c",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "一阶线性动态系统（电路）响应的底层数学与物理逻辑.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "一阶线性动态系统（电路）响应的底层数学与物理逻辑 的大纲"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "bases:新建数据库": false,
+      "obsidian-git:Open Git source control": false
+    }
+  },
+  "active": "ec627ce6f5d47567",
+  "lastOpenFiles": [
+    "电路原理相关证明/06.2_动态电路叠加定理.md",
+    "电路原理相关证明/06.3.1阶跃函数下电容电压连续性.md",
+    "电路原理相关证明/06.3_引入阶跃函数与冲击函数的一些问题证明.md",
+    "电路原理相关证明/06.1_一阶线性动态系统（电路）响应的底层数学与物理逻辑.md",
+    "未命名.canvas",
+    "未命名.base",
+    "电路原理相关证明/06_第六章 一阶电路.md",
+    "电路原理相关证明/00电路分析证明.md",
+    "2026-05-12.md",
+    "电路原理.md",
+    "电路原理相关证明",
+    "欢迎.md"
+  ]
+}
