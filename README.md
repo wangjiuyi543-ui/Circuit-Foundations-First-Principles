@@ -32,3 +32,5 @@ GitHub 网页端目前无法直接渲染 Obsidian 的 .canvas 画布文件，会
 这也是我第一次用github上传知识，还有许多地方没有优化好，后续也会不断又换并且更新
 
 作者：王久一
+<!-- START_CANVAS -->
+<!-- END_CANVAS -->
