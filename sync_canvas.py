@@ -3,57 +3,64 @@ import re
 import os
 import glob
 
-# 1. 自动定位 Canvas 文件
-vault_path = 'Obsidian Vault'
-canvas_files = glob.glob(os.path.join(vault_path, '*.canvas'))
+def sync():
+    # 1. 自动寻找白板文件
+    vault_path = 'Obsidian Vault'
+    canvas_files = glob.glob(os.path.join(vault_path, '*.canvas'))
+    
+    if not canvas_files:
+        print(f"Error: No .canvas file found in {vault_path}")
+        return
 
-if not canvas_files:
-    print(f"Error: No .canvas file found in {vault_path}")
-    exit(1)
+    target_canvas = canvas_files[0]
+    print(f"Found Canvas: {target_canvas}")
 
-target_canvas = canvas_files[0]
-print(f"Processing: {target_canvas}")
+    # 2. 深度解析 JSON
+    with open(target_canvas, 'r', encoding='utf-8') as f:
+        data = json.load(f)
 
-# 2. 读取数据
-with open(target_canvas, 'r', encoding='utf-8') as f:
-    canvas_data = json.load(f)
+    nodes = {}
+    for node in data.get('nodes', []):
+        # 提取标题，优先文件名，次选文本
+        raw_name = node.get('file', node.get('text', 'Node'))
+        display_name = raw_name.split('/')[-1].replace('.md', '')
+        nodes[node['id']] = display_name
 
-# 提取节点，只保留文件名
-nodes = {}
-for node in canvas_data.get('nodes', []):
-    name = node.get('file', node.get('text', 'Node'))
-    nodes[node['id']] = name.split('/')[-1].replace('.md', '')
+    # 3. 构造 Mermaid 语法
+    mermaid_lines = ["graph LR"]
+    for edge in data.get('edges', []):
+        f_id, t_id = edge['fromNode'], edge['toNode']
+        f_name = nodes.get(f_id, "Unknown")
+        t_name = nodes.get(t_id, "Unknown")
+        
+        # 清洗 ID，只保留字母和汉字，防止 Mermaid 报错
+        f_key = re.sub(r'[^\w\u4e00-\u9fa5]', '', f_name)
+        t_key = re.sub(r'[^\w\u4e00-\u9fa5]', '', t_name)
+        
+        mermaid_lines.append(f'    {f_key}["{f_name}"] --> {t_key}["{t_name}"]')
 
-# 3. 生成 Mermaid 语法
-mermaid_lines = ["graph LR"]
-for edge in canvas_data.get('edges', []):
-    from_name = nodes.get(edge['fromNode'], "Unknown")
-    to_name = nodes.get(edge['toNode'], "Unknown")
-    # 清洗特殊字符，防止 Mermaid 渲染失败
-    clean_from = re.sub(r'[^\w\u4e00-\u9fa5]', '_', from_name)
-    clean_to = re.sub(r'[^\w\u4e00-\u9fa5]', '_', to_name)
-    mermaid_lines.append(f'    {clean_from}["{from_name}"] --> {clean_to}["{to_node}"]')
-
-mermaid_content = "\n```mermaid\n" + "\n".join(mermaid_lines) + "\n
+    mermaid_block = "\n```mermaid\n" + "\n".join(mermaid_lines) + "\n
 ```\n"
 
-# 4. 更新 README.md
-with open('README.md', 'r', encoding='utf-8') as f:
-    readme = f.read()
+    # 4. 精准写入 README
+    with open('README.md', 'r', encoding='utf-8') as f:
+        content = f.read()
 
-marker_start = "<!-- START_CANVAS -->"
-marker_end = "<!-- END_CANVAS -->"
+    s_marker = "<!-- START_CANVAS -->"
+    e_marker = "<!-- END_CANVAS -->"
 
-if marker_start not in readme:
-    print("Error: Markers not found in README.md")
-    exit(1)
+    if s_marker not in content or e_marker not in content:
+        print("Error: Markers missing in README.md")
+        return
 
-# 使用切片方式替换，比正则更稳
-parts = readme.split(marker_start)
-rest = parts[1].split(marker_end)
-new_readme = parts[0] + marker_start + mermaid_content + marker_end + rest[1]
+    # 采用正则替换，增强对换行符的兼容性
+    pattern = re.escape(s_marker) + r".*?" + re.escape(e_marker)
+    replacement = s_marker + mermaid_block + e_marker
+    new_content = re.sub(pattern, replacement, content, flags=re.DOTALL)
 
-with open('README.md', 'w', encoding='utf-8') as f:
-    f.write(new_readme)
+    with open('README.md', 'w', encoding='utf-8') as f:
+        f.write(new_content)
+    print("Successfully updated README!")
 
-print("Success: README logic tree updated!")
+if __name__ == "__main__":
+    sync()
