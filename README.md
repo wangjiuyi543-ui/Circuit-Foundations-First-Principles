@@ -42,19 +42,17 @@ graph TD
     node_2["<a href="https://github.com/wangjiuyi543-ui/Circuit-Foundations-First-Principles/blob/main/Obsidian Vault/电路原理相关证明/06.1.0_一阶线性动态系统（电路）响应的底层数学与物理逻辑.md" target="_blank" style="color:inherit;text-decoration:none;">06.1.0_一阶线性动态系统<br>（电路）响应的底层数学与物理逻<br>辑</a>"]
     node_3["<a href="https://github.com/wangjiuyi543-ui/Circuit-Foundations-First-Principles/blob/main/Obsidian Vault/电路原理相关证明/06.2.0_动态电路叠加定理.md" target="_blank" style="color:inherit;text-decoration:none;">06.2.0_动态电路叠加定理<br></a>"]
     node_4["<a href="https://github.com/wangjiuyi543-ui/Circuit-Foundations-First-Principles/blob/main/Obsidian Vault/电路原理相关证明/06.3.0_引入阶跃函数与冲击函数的一些问题证明.md" target="_blank" style="color:inherit;text-decoration:none;">06.3.0_引入阶跃函数与冲<br>击函数的一些问题证明</a>"]
-    node_5["<a href="https://github.com/wangjiuyi543-ui/Circuit-Foundations-First-Principles/blob/main/Obsidian Vault/电路原理相关证明/06.3.4_算子与仿射.md" target="_blank" style="color:inherit;text-decoration:none;">06.3.4_算子与仿射</a>"]
-    node_6["<a href="https://github.com/wangjiuyi543-ui/Circuit-Foundations-First-Principles/blob/main/Obsidian Vault/电路原理相关证明/06.3.1阶跃函数下电容电压连续性.md" target="_blank" style="color:inherit;text-decoration:none;">06.3.1阶跃函数下电容电压<br>连续性</a>"]
-    node_7["<a href="https://github.com/wangjiuyi543-ui/Circuit-Foundations-First-Principles/blob/main/Obsidian Vault/电路原理相关证明/06.3.2_线性时不变(LTI)系统中冲激响应与阶跃响应的微积分关系.md" target="_blank" style="color:inherit;text-decoration:none;">06.3.2_线性时不变(LT<br>I)系统中冲激响应与阶跃响应的<br>微积分关系</a>"]
-    node_8["<a href="https://github.com/wangjiuyi543-ui/Circuit-Foundations-First-Principles/blob/main/Obsidian Vault/电路原理相关证明/06.3.3冲激与阶跃响应的微积分关系及工程定义域闭环.md" target="_blank" style="color:inherit;text-decoration:none;">06.3.3冲激与阶跃响应的微<br>积分关系及工程定义域闭环</a>"]
-    node_9["<a href="https://github.com/wangjiuyi543-ui/Circuit-Foundations-First-Principles/blob/main/Obsidian Vault/电路原理相关证明/06.3.2.1_补充.md" target="_blank" style="color:inherit;text-decoration:none;">06.3.2.1_补充</a>"]
+    node_5["<a href="https://github.com/wangjiuyi543-ui/Circuit-Foundations-First-Principles/blob/main/Obsidian Vault/电路原理相关证明/06.3.1阶跃函数下电容电压连续性.md" target="_blank" style="color:inherit;text-decoration:none;">06.3.1阶跃函数下电容电压<br>连续性</a>"]
+    node_6["<a href="https://github.com/wangjiuyi543-ui/Circuit-Foundations-First-Principles/blob/main/Obsidian Vault/电路原理相关证明/06.3.2_线性时不变(LTI)系统中冲激响应与阶跃响应的微积分关系.md" target="_blank" style="color:inherit;text-decoration:none;">06.3.2_线性时不变(LT<br>I)系统中冲激响应与阶跃响应的<br>微积分关系</a>"]
+    node_7["<a href="https://github.com/wangjiuyi543-ui/Circuit-Foundations-First-Principles/blob/main/Obsidian Vault/电路原理相关证明/06.3.3冲激与阶跃响应的微积分关系及工程定义域闭环.md" target="_blank" style="color:inherit;text-decoration:none;">06.3.3冲激与阶跃响应的微<br>积分关系及工程定义域闭环</a>"]
+    node_8["<a href="https://github.com/wangjiuyi543-ui/Circuit-Foundations-First-Principles/blob/main/Obsidian Vault/电路原理相关证明/06.3.2.1_补充.md" target="_blank" style="color:inherit;text-decoration:none;">06.3.2.1_补充</a>"]
     node_0 --> node_1
     node_1 --> node_2
     node_1 --> node_3
     node_1 --> node_4
+    node_4 --> node_5
     node_4 --> node_6
     node_4 --> node_7
-    node_4 --> node_8
-    node_7 --> node_9
-    node_1 --> node_5
+    node_6 --> node_8
 ```
 <!-- END_CANVAS -->
