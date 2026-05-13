@@ -1,66 +1,93 @@
 import json
 import re
 import os
-import glob
 
 def sync():
-    # 1. 自动寻找白板文件
-    vault_path = 'Obsidian Vault'
-    canvas_files = glob.glob(os.path.join(vault_path, '*.canvas'))
-    
-    if not canvas_files:
-        print(f"Error: No .canvas file found in {vault_path}")
-        return
+    # 固定读取仓库根目录的"未命名.canvas"
+    CANVAS_FILE = "未命名.canvas"
+    README_FILE = "README.md"
 
-    target_canvas = canvas_files[0]
-    print(f"Found Canvas: {target_canvas}")
+    # 1. 检查文件是否存在
+    if not os.path.exists(CANVAS_FILE):
+        print(f"❌ 错误：未找到 {CANVAS_FILE}")
+        exit(1)  # 非0退出码让Actions识别失败
+    print(f"✅ 找到白板文件：{CANVAS_FILE}")
 
-    # 2. 深度解析 JSON
-    with open(target_canvas, 'r', encoding='utf-8') as f:
-        data = json.load(f)
+    # 2. 解析Canvas JSON
+    try:
+        with open(CANVAS_FILE, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+    except json.JSONDecodeError:
+        print("❌ 错误：Canvas文件格式损坏")
+        exit(1)
+    except Exception as e:
+        print(f"❌ 读取失败：{str(e)}")
+        exit(1)
 
+    # 3. 提取节点
     nodes = {}
     for node in data.get('nodes', []):
-        # 提取标题，优先文件名，次选文本
-        raw_name = node.get('file', node.get('text', 'Node'))
+        node_id = node.get('id')
+        if not node_id:
+            continue
+        raw_name = node.get('file', node.get('text', '未命名节点'))
         display_name = raw_name.split('/')[-1].replace('.md', '')
-        nodes[node['id']] = display_name
+        nodes[node_id] = display_name
 
-    # 3. 构造 Mermaid 语法
+    if not nodes:
+        print("⚠️  白板中没有找到任何节点")
+
+    # 4. 生成Mermaid（解决ID重复问题）
     mermaid_lines = ["graph LR"]
+    used_keys = set()
+
+    def clean_key(name):
+        return re.sub(r'[^\w\u4e00-\u9fa5]', '', name) or "Node"
+
     for edge in data.get('edges', []):
-        f_id, t_id = edge['fromNode'], edge['toNode']
-        f_name = nodes.get(f_id, "Unknown")
-        t_name = nodes.get(t_id, "Unknown")
-        
-        # 清洗 ID，只保留字母和汉字，防止 Mermaid 报错
-        f_key = re.sub(r'[^\w\u4e00-\u9fa5]', '', f_name)
-        t_key = re.sub(r'[^\w\u4e00-\u9fa5]', '', t_name)
-        
-        mermaid_lines.append(f'    {f_key}["{f_name}"] --> {t_key}["{t_name}"]')
+        from_id = edge.get('fromNode')
+        to_id = edge.get('toNode')
+        from_name = nodes.get(from_id, "未知节点")
+        to_name = nodes.get(to_id, "未知节点")
 
-    mermaid_block = "\n```mermaid\n" + "\n".join(mermaid_lines) + "\n
-```\n"
+        # 自动处理同名节点
+        f_key = clean_key(from_name)
+        t_key = clean_key(to_name)
+        while f_key in used_keys:
+            f_key += "_1"
+        while t_key in used_keys:
+            t_key += "_1"
+        used_keys.add(f_key)
+        used_keys.add(t_key)
 
-    # 4. 精准写入 README
-    with open('README.md', 'r', encoding='utf-8') as f:
-        content = f.read()
+        mermaid_lines.append(f'    {f_key}["{from_name}"] --> {t_key}["{to_name}"]')
 
-    s_marker = "<!-- START_CANVAS -->"
-    e_marker = "<!-- END_CANVAS -->"
+    # 修复原代码的字符串语法错误！
+    mermaid_block = "\n```mermaid\n" + "\n".join(mermaid_lines) + "\n```\n"
 
-    if s_marker not in content or e_marker not in content:
-        print("Error: Markers missing in README.md")
-        return
+    # 5. 更新README
+    try:
+        with open(README_FILE, 'r', encoding='utf-8') as f:
+            content = f.read()
+    except FileNotFoundError:
+        print(f"❌ 错误：未找到 {README_FILE}")
+        exit(1)
 
-    # 采用正则替换，增强对换行符的兼容性
-    pattern = re.escape(s_marker) + r".*?" + re.escape(e_marker)
-    replacement = s_marker + mermaid_block + e_marker
-    new_content = re.sub(pattern, replacement, content, flags=re.DOTALL)
+    START_MARKER = "<!-- START_CANVAS -->"
+    END_MARKER = "<!-- END_CANVAS -->"
 
-    with open('README.md', 'w', encoding='utf-8') as f:
+    if START_MARKER not in content or END_MARKER not in content:
+        print(f"❌ 错误：README中缺少标记 {START_MARKER} 或 {END_MARKER}")
+        exit(1)
+
+    # 替换标记间内容
+    pattern = re.escape(START_MARKER) + r".*?" + re.escape(END_MARKER)
+    new_content = re.sub(pattern, START_MARKER + mermaid_block + END_MARKER, content, flags=re.DOTALL)
+
+    with open(README_FILE, 'w', encoding='utf-8') as f:
         f.write(new_content)
-    print("Successfully updated README!")
+    
+    print("✅ README流程图已生成！")
 
 if __name__ == "__main__":
     sync()
