@@ -3,14 +3,14 @@ import re
 import os
 
 def sync():
-    # 固定读取仓库根目录的"未命名.canvas"
-    CANVAS_FILE = "未命名.canvas"
+    # ✅ 完全匹配你现在的文件路径
+    CANVAS_FILE = "Obsidian Vault/未命名.canvas"
     README_FILE = "README.md"
 
     # 1. 检查文件是否存在
     if not os.path.exists(CANVAS_FILE):
         print(f"❌ 错误：未找到 {CANVAS_FILE}")
-        exit(1)  # 非0退出码让Actions识别失败
+        exit(1)
     print(f"✅ 找到白板文件：{CANVAS_FILE}")
 
     # 2. 解析Canvas JSON
@@ -62,7 +62,6 @@ def sync():
 
         mermaid_lines.append(f'    {f_key}["{from_name}"] --> {t_key}["{to_name}"]')
 
-    # 修复原代码的字符串语法错误！
     mermaid_block = "\n```mermaid\n" + "\n".join(mermaid_lines) + "\n```\n"
 
     # 5. 更新README
