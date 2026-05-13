@@ -18,9 +18,9 @@ def sync():
         print(f"❌ 读取失败：{str(e)}")
         exit(1)
 
-    # ===================== 核心修复：预先生成全局唯一节点ID =====================
-    nodes = {}  # node_id => 显示名称
-    node_id_map = {}  # 显示名称 => 全局唯一Mermaid ID
+    # ===================== 核心修复：预先生成全局唯一ID映射 =====================
+    # 关键：用Obsidian原生的node_id作为key，每个节点永远对应同一个Mermaid ID
+    node_info = {}  # 格式：{ node_id: (mermaid_id, display_name) }
     id_counter = 0
 
     for node in data.get('nodes', []):
@@ -28,39 +28,58 @@ def sync():
         if not node_id:
             continue
         
+        # 提取显示名称
         raw_name = node.get('file', node.get('text', '未命名节点'))
         display_name = raw_name.split('/')[-1].replace('.md', '')
-        nodes[node_id] = display_name
+        
+        # 生成全局唯一的Mermaid ID（用数字后缀，绝对不会重复）
+        mermaid_id = f"node_{id_counter}"
+        id_counter += 1
+        
+        # 保存映射关系
+        node_info[node_id] = (mermaid_id, display_name)
 
-        # 同一个显示名称永远对应同一个ID，彻底解决节点重复问题
-        if display_name not in node_id_map:
-            clean_name = re.sub(r'[^\w\u4e00-\u9fa5]', '', display_name) or f"Node{id_counter}"
-            node_id_map[display_name] = f"{clean_name}_{id_counter}"
-            id_counter += 1
-
-    if not nodes:
-        print("⚠️  白板中没有找到任何节点")
+    if not node_info:
+        print("⚠️  白板中没有找到任何有效节点")
+        exit(0)
 
     # ===================== 优化Mermaid配置 =====================
     mermaid_lines = [
-        "%%{init: {'theme':'neutral', 'flowchart': {'nodeSpacing': 60, 'rankSpacing': 80, 'curve': 'basis'}}}%%",
-        "graph TD",  # 从上到下布局，完全匹配你的白板方向
-        "    classDef default fill:#e8e0ff,stroke:#9370db,stroke-width:2px,rx:8px,ry:8px;"  # 紫色卡片样式，和Obsidian一致
+        "%%{init: {"
+        "'theme':'neutral', "
+        "'flowchart': {"
+        "'nodeSpacing': 50, "  # 同级节点间距
+        "'rankSpacing': 70, "  # 上下级节点间距
+        "'curve': 'basis', "   # 平滑连线
+        "'htmlLabels': true"   # 支持HTML换行
+        "}"
+        "}}%%",
+        "graph TD",  # 从上到下布局，完全匹配你的白板
+        # 统一节点样式：紫色圆角卡片，和Obsidian风格一致
+        "    classDef default fill:#e8e0ff,stroke:#9370db,stroke-width:2px,rx:8px,ry:8px;"
     ]
 
-    # 生成边（现在同一个节点只会出现一次）
+    # ===================== 第一步：先定义所有节点（只定义一次！） =====================
+    for mermaid_id, display_name in node_info.values():
+        # 处理长文本自动换行（每15个字符换一行）
+        wrapped_name = re.sub(r'(.{15})', r'\1<br>', display_name)
+        mermaid_lines.append(f'    {mermaid_id}["{wrapped_name}"]')
+
+    # ===================== 第二步：再添加所有连线 =====================
     for edge in data.get('edges', []):
-        from_id = edge.get('fromNode')
-        to_id = edge.get('toNode')
+        from_node_id = edge.get('fromNode')
+        to_node_id = edge.get('toNode')
         
-        from_name = nodes.get(from_id, "未知节点")
-        to_name = nodes.get(to_id, "未知节点")
+        # 跳过无效连线
+        if from_node_id not in node_info or to_node_id not in node_info:
+            continue
+        
+        from_mid = node_info[from_node_id][0]
+        to_mid = node_info[to_node_id][0]
+        
+        mermaid_lines.append(f'    {from_mid} --> {to_mid}')
 
-        f_key = node_id_map[from_name]
-        t_key = node_id_map[to_name]
-
-        mermaid_lines.append(f'    {f_key}["{from_name}"] --> {t_key}["{to_name}"]')
-
+    # 拼接完整代码块
     mermaid_block = "\n```mermaid\n" + "\n".join(mermaid_lines) + "\n```\n"
 
     # 更新README
@@ -84,7 +103,7 @@ def sync():
     with open(README_FILE, 'w', encoding='utf-8') as f:
         f.write(new_content)
     
-    print("✅ 优化版流程图已生成！")
+    print("✅ 流程图已完美生成！节点重复问题已彻底解决！")
 
 if __name__ == "__main__":
     sync()
