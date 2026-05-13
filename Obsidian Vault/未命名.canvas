@@ -1,17 +1,19 @@
 {
 	"nodes":[
-		{"id":"db60933767587adf","type":"file","file":"电路原理相关证明/00电路分析证明.md","x":-1400,"y":-560,"width":400,"height":400},
-		{"id":"495a1dcd5ee8819f","type":"file","file":"电路原理相关证明/06.1_一阶线性动态系统（电路）响应的底层数学与物理逻辑.md","x":320,"y":-1409,"width":400,"height":400},
-		{"id":"701d44ea884f2c08","type":"file","file":"电路原理相关证明/06.3_引入阶跃函数与冲击函数的一些问题证明.md","x":320,"y":-240,"width":400,"height":400},
-		{"id":"7ae107231f6577f5","type":"file","file":"电路原理相关证明/06.3.1阶跃函数下电容电压连续性.md","x":861,"y":-160,"width":400,"height":400},
-		{"id":"6b5d58e2135d00c8","type":"file","file":"电路原理相关证明/06.2_动态电路叠加定理.md","x":461,"y":-760,"width":400,"height":400},
-		{"id":"31fd6b6b302a98fc","type":"file","file":"电路原理相关证明/06_第六章 一阶电路.md","x":-440,"y":-160,"width":400,"height":400}
+		{"id":"db60933767587adf","type":"file","file":"电路原理相关证明/00电路分析证明.md","x":-2000,"y":-671,"width":400,"height":400},
+		{"id":"495a1dcd5ee8819f","type":"file","file":"电路原理相关证明/06.1_一阶线性动态系统（电路）响应的底层数学与物理逻辑.md","x":-280,"y":-1520,"width":400,"height":400},
+		{"id":"701d44ea884f2c08","type":"file","file":"电路原理相关证明/06.3_引入阶跃函数与冲击函数的一些问题证明.md","x":-280,"y":-351,"width":400,"height":400},
+		{"id":"6b5d58e2135d00c8","type":"file","file":"电路原理相关证明/06.2_动态电路叠加定理.md","x":-139,"y":-871,"width":400,"height":400},
+		{"id":"31fd6b6b302a98fc","type":"file","file":"电路原理相关证明/06_第六章 一阶电路.md","x":-1040,"y":-271,"width":400,"height":400},
+		{"id":"7ae107231f6577f5","type":"file","file":"电路原理相关证明/06.3.1阶跃函数下电容电压连续性.md","x":360,"y":49,"width":400,"height":400},
+		{"id":"20567629ce7f809a","x":360,"y":-471,"width":400,"height":400,"type":"file","file":"电路原理相关证明/06.3.2_线性时不变(LTI)系统中冲激响应与阶跃响应的微积分关系.md"}
 	],
 	"edges":[
 		{"id":"2f40e13deb4b6756","fromNode":"db60933767587adf","fromSide":"right","toNode":"31fd6b6b302a98fc","toSide":"left"},
 		{"id":"bff468401ad72351","fromNode":"31fd6b6b302a98fc","fromSide":"right","toNode":"495a1dcd5ee8819f","toSide":"left"},
 		{"id":"eeaab9842437fd1b","fromNode":"31fd6b6b302a98fc","fromSide":"right","toNode":"6b5d58e2135d00c8","toSide":"left"},
 		{"id":"75aee1163b3f5de7","fromNode":"31fd6b6b302a98fc","fromSide":"right","toNode":"701d44ea884f2c08","toSide":"left"},
-		{"id":"f11ff06893644c50","fromNode":"701d44ea884f2c08","fromSide":"right","toNode":"7ae107231f6577f5","toSide":"left"}
+		{"id":"f11ff06893644c50","fromNode":"701d44ea884f2c08","fromSide":"right","toNode":"7ae107231f6577f5","toSide":"left"},
+		{"id":"610d9ef1e4e4b4e1","fromNode":"701d44ea884f2c08","fromSide":"right","toNode":"20567629ce7f809a","toSide":"left"}
 	]
 }

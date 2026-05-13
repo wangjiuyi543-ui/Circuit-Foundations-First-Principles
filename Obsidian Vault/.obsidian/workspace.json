@@ -11,14 +11,17 @@
             "id": "ec627ce6f5d47567",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "canvas",
               "state": {
-                "file": "电路原理相关证明/06.3.1阶跃函数下电容电压连续性.md",
-                "mode": "source",
-                "source": false
+                "file": "未命名.canvas",
+                "viewState": {
+                  "x": -69.5,
+                  "y": -584.5,
+                  "zoom": -1.7079013967145507
+                }
               },
-              "icon": "lucide-file",
-              "title": "06.3.1阶跃函数下电容电压连续性"
+              "icon": "lucide-layout-dashboard",
+              "title": "未命名"
             }
           }
         ]
@@ -94,7 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "电路原理相关证明/06.3.1阶跃函数下电容电压连续性.md",
+                "file": "未命名.canvas",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +107,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "06.3.1阶跃函数下电容电压连续性 的反向链接列表"
+              "title": "未命名 的反向链接列表"
             }
           },
           {
@@ -185,11 +188,12 @@
   },
   "active": "ec627ce6f5d47567",
   "lastOpenFiles": [
+    "未命名.canvas",
+    "电路原理相关证明/06.3.2_线性时不变(LTI)系统中冲激响应与阶跃响应的微积分关系.md",
+    "电路原理相关证明/06.3_引入阶跃函数与冲击函数的一些问题证明.md",
+    "电路原理相关证明/06.3.1阶跃函数下电容电压连续性.md",
     "电路原理相关证明/06.1_一阶线性动态系统（电路）响应的底层数学与物理逻辑.md",
     "电路原理相关证明/06.2_动态电路叠加定理.md",
-    "电路原理相关证明/06.3.1阶跃函数下电容电压连续性.md",
-    "电路原理相关证明/06.3_引入阶跃函数与冲击函数的一些问题证明.md",
-    "未命名.canvas",
     "未命名.base",
     "电路原理相关证明/06_第六章 一阶电路.md",
     "电路原理相关证明/00电路分析证明.md",
